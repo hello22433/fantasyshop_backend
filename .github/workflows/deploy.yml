@@ -4,7 +4,7 @@ on:
   push:
     branches:
 #      - main  # main 브랜치에 푸시될 때만 실행
-# 푸쉬 푸쉬 vt vtㅇ
+# 푸쉬 푸쉬 vt vt
 
 jobs:
   deploy:
