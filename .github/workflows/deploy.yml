@@ -41,4 +41,4 @@ jobs:
             docker pull leesejoon/fantasyshop-backend:latest
             docker stop fantasyshop-backend-container || true
             docker rm fantasyshop-backend-container || true
-            docker run -d --name fantasyshop-backend-container -p 8080:8080 leesejoon/fantasyshop-backend:latest
+            docker run --env-file .env -d --name fantasyshop-backend-container -p 8080:8080 leesejoon/fantasyshop-backend:latest
