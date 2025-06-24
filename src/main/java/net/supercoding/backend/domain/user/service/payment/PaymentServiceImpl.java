@@ -111,7 +111,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void deletePaymentsByUserId(Long userId) {
-        List<Payment> payments = paymentRepository.findByUserId(userId);
+        List<Payment> payments = paymentRepository.findByUser_UserPk(userId);
         paymentRepository.deleteAll(payments);
     }
 

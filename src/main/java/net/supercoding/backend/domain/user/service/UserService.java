@@ -30,12 +30,11 @@ import java.util.UUID;
 public class UserService {
     private final CartItemRepository cartItemRepository;
     private final PaymentItemRepository paymentItemRepository;
-    private final PaymentService paymentService;
+    private final PaymentServiceImpl paymentService;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final String IMAGE_BASE_PATH = "/home/ubuntu/www/fantasyshop/assets/images/";
-    private final PaymentServiceImpl paymentServiceImpl;
 
 //    private final ImageUploader imageUploader;
 
@@ -153,16 +152,17 @@ public class UserService {
 //    }
 
 
+    // 회원탈퇴
     @Transactional
     public void deleteUserById(Long userId) {
         // 1. 장바구니 아이템 삭제
-        cartItemRepository.deleteByUserId(userId);
+        cartItemRepository.deleteByUser_UserPk(userId);
 
         // 2. 결제 항목 삭제
-        paymentItemRepository.deleteByUserId(userId);
+        paymentItemRepository.deleteByPayment_User_UserPk(userId);
 
         // 3. 결제 정보 삭제 (paymentService 내부에서 처리되면 좋음)
-        paymentServiceImpl.deletePaymentsByUserId(userId);
+        paymentService.deletePaymentsByUserId(userId);
 
         // 4. 유저 삭제
         userRepository.deleteById(userId);
