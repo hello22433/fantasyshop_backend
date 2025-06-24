@@ -1,0 +1,40 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+#      - main  # main 브랜치에 푸시될 때만 실행
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ 코드 받아오기
+        uses: actions/checkout@v3
+
+      - name: 🔧 Docker Buildx 설정
+        uses: docker/setup-buildx-action@v2
+
+      - name: 🔑 DockerHub 로그인
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 🐳 Docker 이미지 빌드 & 푸시
+        run: |
+          docker build -t leesejoon/fantasyshop-backend:latest .
+          docker push leesejoon/fantasyshop-backend:latest
+
+      - name: 🚀 EC2에 SSH 접속 후 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull leesejoon/fantasyshop-backend:latest
+            docker stop fantasyshop-backend-container || true
+            docker rm fantasyshop-backend-container || true
+            docker run -d --name fantasyshop-backend-container -p 8080:8080 leesejoon/fantasyshop-backend:latest
