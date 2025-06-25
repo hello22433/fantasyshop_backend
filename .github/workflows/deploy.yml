@@ -55,4 +55,4 @@ jobs:
             docker-compose -f /home/ec2-user/docker-compose.yml down
 
             # 새 백엔드 컨테이너 재시작 (env_file 자동 적용)
-            docker-compose -f /home/ec2-user/docker-compose.yml up -d --build app
+            docker-compose --env-file /home/ec2-user/.env -f /home/ec2-user/docker-compose.yml up -d --build app
