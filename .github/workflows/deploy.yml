@@ -4,7 +4,7 @@ on:
   push:
     branches:
 #      - main
-# 푸쉬용 e
+# 푸쉬용 e e
 
 jobs:
   deploy:
