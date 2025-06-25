@@ -52,8 +52,8 @@ jobs:
             fi
             
             # 기존 백엔드 컨테이너 중지 및 삭제
-            docker stop fantasyshop-backend-container || true
-            docker rm fantasyshop-backend-container || true
+#            docker stop fantasyshop-backend-container || true
+#            docker rm fantasyshop-backend-container || true
             docker-compose -f /home/ec2-user/docker-compose.yml down
 
             # 새 백엔드 컨테이너 재시작 (env_file 자동 적용)

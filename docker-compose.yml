@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring-app
+    container_name: fantasyshop-backend-container
     depends_on:
       - redis
 ##      - db
