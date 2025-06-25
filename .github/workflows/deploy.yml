@@ -38,21 +38,14 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # 최신 이미지 pull
             docker pull leesejoon/fantasyshop-backend:latest
 
-             # Redis 상태 확인 및 실행 (docker run 유지)
-            redis_status=$(docker inspect -f '{{.State.Status}}' redis 2>/dev/null || echo "notfound")
-  
-            if [ "$redis_status" != "running" ]; then
-              echo "🔄 Redis가 실행 중이 아님($redis_status). 재시작합니다."
-              docker rm redis || true
-              docker run -d --restart=always --name redis -p 6379:6379 redis:latest
-            else
-              echo "✅ Redis가 이미 실행 중입니다. 유지합니다."
-            fi
-            
-            # 기존 백엔드 컨테이너 중지 및 삭제
+            # 수동으로 떠 있을 수 있는 redis 컨테이너 강제 삭제
+            docker rm -f redis || true
+
+            # docker-compose 컨테이너 중지 및 삭제
             docker-compose -f /home/ec2-user/docker-compose.yml down
 
-            # 새 백엔드 컨테이너 재시작 (env_file 자동 적용)
-            docker-compose --env-file /home/ec2-user/.env -f /home/ec2-user/docker-compose.yml up -d --build app
+            # docker-compose로 redis와 app 함께 재실행 (.env 환경변수 적용)
+            docker-compose --env-file /home/ec2-user/.env -f /home/ec2-user/docker-compose.yml up -d
